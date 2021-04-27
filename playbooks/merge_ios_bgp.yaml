@@ -1,0 +1,12 @@
+---
+- name: configure BGP for blog
+  hosts: cisco
+  gather_facts: false
+  tasks:
+  - name: Use the bgp_global resource module
+    cisco.ios.ios_bgp_global:
+      config: "{{ bgp_global }}"
+
+  - name: Use the bgp_address_family
+    cisco.ios.ios_bgp_address_family:
+      config: "{{ bgp_address_family }}
