@@ -9,4 +9,4 @@
 
   - name: Use the bgp_address_family
     cisco.ios.ios_bgp_address_family:
-      config: "{{ bgp_address_family }}
+      config: "{{ bgp_address_family }}"
