@@ -1,0 +1,31 @@
+---
+- name: convert configured BGP resource to structured data
+  hosts: cisco
+  gather_facts: false
+  tasks:
+  - name: Use the bgp_global resource module to gather the current config
+    cisco.ios.ios_bgp_global:
+      state: gathered
+    register: bgp_global
+
+  - name: Use the bgp_address_family resource module to gather the current config
+    cisco.ios.ios_bgp_address_family:
+      state: gathered
+    register: bgp_address_family
+
+  - name: Create inventory directory
+    become: true
+    file:
+      path: "{{ playbook_dir }}/host_vars/{{ inventory_hostname }}"
+      state: directory
+
+  - name: Write the configuration to a file
+    become: true
+    copy:
+      content: "{{ {item: item_var['gathered']} | to_nice_yaml }}"
+      dest: "{{ playbook_dir }}/host_vars/{{ inventory_hostname }}/{{ item }}.yaml"
+    loop:
+      - bgp_global
+      - bgp_address_family
+    vars:
+      item_var: "{{ lookup('vars', item) }}"
