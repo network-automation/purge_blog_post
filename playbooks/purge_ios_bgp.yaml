@@ -1,0 +1,8 @@
+---
+- name: configure BGP for blog
+  hosts: cisco
+  gather_facts: false
+  tasks:
+  - name: Use the bgp_global resource module
+    cisco.ios.ios_bgp_global:
+      state: purged
